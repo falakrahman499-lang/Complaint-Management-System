@@ -1,0 +1,108 @@
+
+
+body {
+    
+    background-image: radial-gradient(#c2d0b9 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #5b6b81;
+}
+
+.field-input {
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 12px;
+    background: #ffffff;
+    border: 1px solid #dde3ea;
+    border-radius: 8px;
+    font: inherit;
+    color: #1e2a3b;
+}
+
+.field-input:focus {
+    outline: 2px solid #2454a8;
+    outline-offset: 1px;
+    border-color: #2454a8;
+}
+
+.stat-cell {
+    padding: 16px 18px;
+    border-right: 1px solid #dde3ea;
+    border-bottom: 1px solid #dde3ea;
+}
+
+@media (min-width: 768px) {
+    .stat-cell {
+        border-bottom: none;
+    }
+}
+
+
+.complaint-card {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    padding: 16px 16px 16px 20px;
+}
+
+.complaint-card::before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    bottom: 12px;
+    left: 0;
+    width: 4px;
+    border-radius: 4px;
+    background: #5b6b81;
+}
+
+.complaint-card[data-priority="High"]::before { background: #b8432f; }
+.complaint-card[data-priority="Medium"]::before { background: #9a6b0c; }
+.complaint-card[data-priority="Low"]::before { background: #1f6f4f; }
+
+.status-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-pill.status-pending { background: #fbe9d0; color: #b9770e; }
+.status-pill.status-progress { background: #dae6f7; color: #2454a8; }
+.status-pill.status-resolved { background: #d9ede1; color: #1f7a4d; }
+
+.priority-tag {
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.priority-tag.priority-high { background: #f7ded8; color: #b8432f; }
+.priority-tag.priority-medium { background: #f5e8cc; color: #9a6b0c; }
+.priority-tag.priority-low { background: #d9ede3; color: #1f6f4f; }
+
+#toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 20;
+    max-width: min(320px, calc(100% - 40px));
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #1e2a3b;
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(28, 43, 58, 0.18);
+}
+
+#toast.error {
+    background: #b8432f;
+}

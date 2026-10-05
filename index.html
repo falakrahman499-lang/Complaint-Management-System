@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Management System</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ["'Space Grotesk'", "sans-serif"],
+                        sans: ["Inter", "sans-serif"]
+                    },
+                    colors: {
+                        ink: "#1e2a3b",
+                        "ink-soft": "#5b6b81",
+                        paper: "#f2f4f7",
+                        line: "#dde3ea",
+                        brand: {
+                            DEFAULT: "#2454a8",
+                            dark: "#173c80"
+                        },
+                        pending: "#b9770e",
+                        inprogress: "#2454a8",
+                        resolved: "#1f7a4d",
+                        high: "#b8432f",
+                        medium: "#9a6b0c",
+                        low: "#1f6f4f"
+                    }
+                }
+            }
+        };
+    </script>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-paper text-ink font-sans">
+
+    <div class="mx-auto max-w-6xl px-4 py-6 md:px-6">
+
+        
+        <header class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-ink pb-4 mb-6">
+            <div>
+                <h1 class="font-display text-2xl md:text-3xl font-bold tracking-tight">Complaint Management System</h1>
+                <p class="text-ink-soft text-sm mt-1">Submit, track, and resolve complaints in one place.</p>
+            </div>
+            <button id="new-complaint-btn" type="button"
+                class="rounded-md bg-brand hover:bg-brand-dark transition-colors px-4 py-2.5 text-white font-medium">
+                + New complaint
+            </button>
+        </header>
+
+        
+        <section aria-label="Complaint statistics"
+            class="grid grid-cols-2 md:grid-cols-4 bg-white border border-line rounded-lg shadow-sm overflow-hidden mb-6">
+            <div class="stat-cell">
+                <p class="text-2xl font-display font-bold text-ink" id="stat-total">0</p>
+                <p class="text-xs text-ink-soft mt-1">Total complaints</p>
+            </div>
+            <div class="stat-cell">
+                <p class="text-2xl font-display font-bold text-pending" id="stat-pending">0</p>
+                <p class="text-xs text-ink-soft mt-1">Pending</p>
+            </div>
+            <div class="stat-cell">
+                <p class="text-2xl font-display font-bold text-inprogress" id="stat-inprogress">0</p>
+                <p class="text-xs text-ink-soft mt-1">In progress</p>
+            </div>
+            <div class="stat-cell border-r-0">
+                <p class="text-2xl font-display font-bold text-resolved" id="stat-resolved">0</p>
+                <p class="text-xs text-ink-soft mt-1">Resolved</p>
+            </div>
+        </section>
+
+        
+        <section id="complaint-form-panel" class="hidden bg-white border border-line rounded-lg shadow-sm p-5 mb-6">
+            <h2 class="font-display font-bold text-lg mb-4" id="form-heading">File a complaint</h2>
+
+            <form id="complaint-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+
+                
+                <input type="hidden" id="editing-id" value="">
+                
+
+                <div class="md:col-span-2">
+                    <label class="field-label" for="complaint-title">Title</label>
+                    <input type="text" id="complaint-title" class="field-input" placeholder="e.g. Streetlight not working">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="field-label" for="complaint-description">Description</label>
+                    <textarea id="complaint-description" rows="3" class="field-input" placeholder="Describe the issue in detail..."></textarea>
+                </div>
+
+                <div>
+                    <label class="field-label" for="complaint-category">Category</label>
+                    <select id="complaint-category" class="field-input">
+                        <option value="">Select category</option>
+                        <option value="Electricity">Electricity</option>
+                        <option value="Water Supply">Water Supply</option>
+                        <option value="Road & Infrastructure">Road &amp; Infrastructure</option>
+                        <option value="Sanitation">Sanitation</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="field-label" for="complaint-priority">Priority</label>
+                    <select id="complaint-priority" class="field-input">
+                        <option value="">Select priority</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="field-label" for="complaint-status">Status</label>
+                    <select id="complaint-status" class="field-input">
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="field-label" for="complaint-date">Date filed</label>
+                    <input type="date" id="complaint-date" class="field-input">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="field-label" for="complaint-location">Location</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="complaint-location" class="field-input" placeholder="e.g. Asansol, West Bengal">
+                        <button type="button" id="locate-btn" class="shrink-0 rounded-md border border-line bg-paper px-4 text-sm font-medium hover:bg-line/60 transition-colors">
+                            Locate
+                        </button>
+                    </div>
+                    <p id="location-preview" class="text-xs text-ink-soft mt-1.5"></p>
+                </div>
+
+                <div class="md:col-span-2 flex gap-3 pt-2">
+                    <button type="submit" id="submit-btn"
+                        class="rounded-md bg-brand hover:bg-brand-dark transition-colors px-5 py-2.5 text-white font-medium">
+                        Submit complaint
+                    </button>
+                    <button type="button" id="cancel-form-btn"
+                        class="rounded-md border border-line px-5 py-2.5 font-medium hover:bg-paper transition-colors">
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+        
+        <section aria-label="Search and filter" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+            <input type="search" id="search-complaint" placeholder="Search by title or complaint ID..."
+                class="field-input md:col-span-2" aria-label="Search complaints">
+            <select id="filter-status" class="field-input" aria-label="Filter by status">
+                <option value="all">All statuses</option>
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+            </select>
+            <select id="filter-priority" class="field-input" aria-label="Filter by priority">
+                <option value="all">All priorities</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+        </section>
+        <section class="mb-2 -mt-4">
+            <select id="filter-category" class="field-input w-full md:w-64" aria-label="Filter by category">
+                <option value="all">All categories</option>
+                <option value="Electricity">Electricity</option>
+                <option value="Water Supply">Water Supply</option>
+                <option value="Road & Infrastructure">Road &amp; Infrastructure</option>
+                <option value="Sanitation">Sanitation</option>
+                <option value="Other">Other</option>
+            </select>
+        </section>
+
+        
+        <main>
+            <div id="complaint-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                
+            </div>
+        </main>
+
+    </div>
+
+    <footer class="text-center text-ink-soft text-sm py-6">
+        <p>Complaint Management System &copy; 2026</p>
+    </footer>
+
+
+    
+    
+    <script src="js/utils.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/location.js"></script>
+    <script src="js/complaints.js"></script>
+    <script src="js/stats.js"></script>
+     <script src="js/app.js"></script>
+</body>
+
+</html>
